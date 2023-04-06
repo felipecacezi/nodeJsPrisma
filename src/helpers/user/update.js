@@ -3,15 +3,16 @@ const prisma = new PrismaClient()
 
 module.exports = {
 
-    criarUsuario: async function(name, email){
+    alterarUsuario: async function(id, name, email){
         let responseObj = null
         try {
 
-            const { id } = await prisma.user.create({
+            await prisma.user.update({
+                where: { id: parseInt(id) },
                 data: {
                     name,
                     email
-                }
+                },
             })
 
             responseObj = {
@@ -21,7 +22,7 @@ module.exports = {
                     }
                 ],
                 status: 200,
-                msg: 'Usuário cadastrado com sucesso'
+                msg: `Usuário #${id} alterado com sucesso`
             }
 
         } catch (error) {
@@ -37,7 +38,7 @@ module.exports = {
                     responseObj = {
                         data: [],
                         status: 500,
-                        msg: 'Impossivel cadastrar um novo usuário, entre em contato com o suporte'
+                        msg: `Impossivel alterar o usuário #${id}, entre em contato com o suporte`
                     }
                 break;
             }
@@ -47,28 +48,21 @@ module.exports = {
         return responseObj
     },
 
-    validarDadosInsert: function(name, email){
+    validarDadosUpdate: function(id, name, email){
 
         validacao = {
             status: 200,
             msg: 'Campos validados com sucesso'
         };
 
-        if (!name) {
+        if (!id) {
             validacao = {
                 status: 422,
-                msg: 'O campo name não pode ser vazio'
+                msg: 'O campo id não pode ser vazio'
             }
             return validacao
         }
 
-        if (!email) {
-            validacao = {
-                status: 422,
-                msg: 'O campo email não pode ser vazio'
-            }
-            return validacao
-        }
         return validacao
     }
 
