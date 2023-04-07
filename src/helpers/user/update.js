@@ -48,7 +48,7 @@ module.exports = {
         return responseObj
     },
 
-    validarDadosUpdate: function(id, name, email){
+    validarDadosUpdate: function(id){
 
         validacao = {
             status: 200,
